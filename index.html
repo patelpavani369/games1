@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON ARCADE - DODGE MASTER</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Game Container -->
+    <div id="gameContainer" class="game-container">
+        <!-- Animated Background Grid -->
+        <div class="background-grid"></div>
+        <div class="background-scanlines"></div>
+        <div class="floating-particles"></div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen start-screen active">
+            <div class="screen-wrapper">
+                <div class="cyber-corner corner-tl"></div>
+                <div class="cyber-corner corner-tr"></div>
+                <div class="cyber-corner corner-bl"></div>
+                <div class="cyber-corner corner-br"></div>
+
+                <div class="screen-content">
+                    <div class="logo-container">
+                        <div class="logo-glow"></div>
+                        <div class="neon-title">
+                            <h1 class="title-main">NEON</h1>
+                            <h1 class="title-main">ARCADE</h1>
+                            <p class="title-sub">⚡ DODGE MASTER ⚡</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-ticker">
+                        <div class="ticker-item"><span class="ticker-label">SYSTEM:</span> <span class="ticker-value">ONLINE</span></div>
+                        <div class="ticker-item"><span class="ticker-label">STATUS:</span> <span class="ticker-value">READY</span></div>
+                        <div class="ticker-item"><span class="ticker-label">PLAYERS:</span> <span class="ticker-value">1</span></div>
+                    </div>
+
+                    <div class="tagline-container">
+                        <p class="tagline">Navigate the digital wasteland</p>
+                        <p class="tagline">Survive the chaos</p>
+                        <p class="tagline">Beat your record</p>
+                    </div>
+
+                    <div class="difficulty-selector glass-effect">
+                        <h3 class="selector-title">⚙ DIFFICULTY MATRIX</h3>
+                        <div class="difficulty-buttons">
+                            <button class="difficulty-btn ease-mode" data-difficulty="easy">
+                                <span class="difficulty-icon">◆</span>
+                                <span class="difficulty-label">EASY</span>
+                                <span class="difficulty-desc">Casual Mode</span>
+                            </button>
+                            <button class="difficulty-btn normal-mode active" data-difficulty="normal">
+                                <span class="difficulty-icon">◆◆</span>
+                                <span class="difficulty-label">NORMAL</span>
+                                <span class="difficulty-desc">Balanced</span>
+                            </button>
+                            <button class="difficulty-btn hard-mode" data-difficulty="hard">
+                                <span class="difficulty-icon">◆◆◆</span>
+                                <span class="difficulty-label">HARD</span>
+                                <span class="difficulty-desc">Extreme</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="play-button-container">
+                        <button id="playButton" class="play-button premium-button">
+                            <span class="button-shine"></span>
+                            <span class="button-text">▶ ENTER THE ARENA</span>
+                            <span class="button-glow"></span>
+                            <span class="button-circuit-top"></span>
+                            <span class="button-circuit-bottom"></span>
+                        </button>
+                    </div>
+
+                    <div class="high-score-card glass-effect">
+                        <div class="score-header">
+                            <span class="score-icon">🏆</span>
+                            <span class="score-title">BEST PERFORMANCE</span>
+                        </div>
+                        <div class="score-content">
+                            <h2 id="startHighScore">0</h2>
+                            <p class="score-subtext">points</p>
+                        </div>
+                    </div>
+
+                    <div class="system-info">
+                        <p>💾 Data saved locally</p>
+                        <p>🎮 Keyboard or Touch Controls</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen game-screen">
+            <!-- Canvas for game -->
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- Advanced HUD -->
+            <div class="hud-system">
+                <!-- Top HUD Bar -->
+                <div class="hud-top glass-effect">
+                    <div class="hud-section left-section">
+                        <div class="hud-widget score-widget">
+                            <div class="widget-header">
+                                <span class="widget-icon">⬢</span>
+                                <span class="widget-title">SCORE</span>
+                            </div>
+                            <div class="widget-value neon-text" id="scoreDisplay">0</div>
+                            <div class="widget-bar">
+                                <div class="widget-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hud-section center-section">
+                        <div class="game-info">
+                            <div class="info-item">
+                                <span class="info-label">TIME</span>
+                                <span class="info-value" id="timeDisplay">0:00</span>
+                            </div>
+                            <div class="info-divider"></div>
+                            <div class="info-item">
+                                <span class="info-label">WAVE</span>
+                                <span class="info-value" id="waveDisplay">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hud-section right-section">
+                        <div class="hud-widget speed-widget">
+                            <div class="widget-header">
+                                <span class="widget-icon">⚡</span>
+                                <span class="widget-title">SPEED</span>
+                            </div>
+                            <div class="widget-value neon-text" id="speedDisplay">1.0x</div>
+                            <div class="widget-bar speed-bar">
+                                <div class="widget-fill speed-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom HUD Bar -->
+                <div class="hud-bottom glass-effect">
+                    <div class="combo-display" id="comboDisplay">
+                        <span class="combo-icon">🔥</span>
+                        <span class="combo-text">COMBO</span>
+                        <span class="combo-value">x1</span>
+                    </div>
+
+                    <div class="obstacles-counter">
+                        <span class="counter-icon">🎯</span>
+                        <span class="counter-text">DODGED</span>
+                        <span class="counter-value" id="dodgedCount">0</span>
+                    </div>
+
+                    <button id="pauseButton" class="control-button pause-button">
+                        <span id="pauseIcon" class="pause-icon">⏸</span>
+                        <span class="button-label">PAUSE</span>
+                    </button>
+
+                    <div class="health-indicator">
+                        <span class="health-icon">❤️</span>
+                        <span class="health-text">SHIELDS</span>
+                        <span class="health-value" id="healthDisplay">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div class="mobile-controls">
+                <button id="leftBtn" class="mobile-btn left-btn">◀ LEFT</button>
+                <button id="rightBtn" class="mobile-btn right-btn">RIGHT ▶</button>
+            </div>
+
+            <!-- Warning Indicator -->
+            <div class="danger-indicator" id="dangerIndicator">
+                <div class="danger-pulse"></div>
+                <span>⚠️ DANGER</span>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pauseScreen" class="screen pause-screen">
+            <div class="pause-overlay"></div>
+            <div class="screen-wrapper">
+                <div class="cyber-corner corner-tl"></div>
+                <div class="cyber-corner corner-tr"></div>
+                <div class="cyber-corner corner-bl"></div>
+                <div class="cyber-corner corner-br"></div>
+
+                <div class="pause-content">
+                    <h2 class="pause-title">⏸ PAUSED</h2>
+                    <div class="pause-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">CURRENT SCORE</span>
+                            <span class="stat-value" id="pauseScore">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">TIME ELAPSED</span>
+                            <span class="stat-value" id="pauseTime">0:00</span>
+                        </div>
+                    </div>
+                    <div class="pause-buttons">
+                        <button id="resumeButton" class="action-button premium-button">
+                            <span class="button-text">▶ RESUME</span>
+                        </button>
+                        <button id="quitButton" class="action-button secondary-button">
+                            <span class="button-text">🏠 MAIN MENU</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen game-over-screen">
+            <div class="game-over-overlay"></div>
+            <div class="screen-wrapper">
+                <div class="cyber-corner corner-tl"></div>
+                <div class="cyber-corner corner-tr"></div>
+                <div class="cyber-corner corner-bl"></div>
+                <div class="cyber-corner corner-br"></div>
+
+                <div class="game-over-content">
+                    <h2 class="game-over-title">
+                        <span class="title-icon">⚰️</span>
+                        SYSTEM FAILURE
+                        <span class="title-icon">⚰️</span>
+                    </h2>
+
+                    <div class="final-score-container">
+                        <div class="score-box primary-score glass-effect">
+                            <p class="score-label">FINAL SCORE</p>
+                            <p class="score-value" id="finalScore">0</p>
+                        </div>
+                        <div class="score-box secondary-score glass-effect">
+                            <p class="score-label">SURVIVAL TIME</p>
+                            <p class="score-value" id="survivalTime">0:00</p>
+                        </div>
+                    </div>
+
+                    <div class="achievement-check glass-effect" id="highScoreCheck"></div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card glass-effect">
+                            <span class="stat-icon">🎯</span>
+                            <span class="stat-title">Obstacles Dodged</span>
+                            <span class="stat-number" id="obstaclesDodged">0</span>
+                        </div>
+                        <div class="stat-card glass-effect">
+                            <span class="stat-icon">⚡</span>
+                            <span class="stat-title">Max Speed</span>
+                            <span class="stat-number" id="maxSpeed">1.0x</span>
+                        </div>
+                        <div class="stat-card glass-effect">
+                            <span class="stat-icon">🏆</span>
+                            <span class="stat-title">Waves Survived</span>
+                            <span class="stat-number" id="wavesSurvived">0</span>
+                        </div>
+                        <div class="stat-card glass-effect">
+                            <span class="stat-icon">🔥</span>
+                            <span class="stat-title">Max Combo</span>
+                            <span class="stat-number" id="maxCombo">1x</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons-container">
+                        <button id="retryButton" class="action-button premium-button large-button">
+                            <span class="button-text">🔄 TRY AGAIN</span>
+                        </button>
+                        <button id="menuButton" class="action-button secondary-button large-button">
+                            <span class="button-text">🏠 MAIN MENU</span>
+                        </button>
+                    </div>
+
+                    <div class="ranking-display" id="rankingDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Particle Container -->
+        <div id="particleContainer" class="particle-container"></div>
+
+        <!-- Combat Effect Layer -->
+        <div id="effectLayer" class="effect-layer"></div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop preload="auto"></audio>
+    <audio id="collectSound" preload="auto"></audio>
+    <audio id="hitSound" preload="auto"></audio>
+    <audio id="clickSound" preload="auto"></audio>
+    <audio id="waveSound" preload="auto"></audio>
+    <audio id="comboSound" preload="auto"></audio>
+
+    <script src="game.js"></script>
+</body>
+</html>
